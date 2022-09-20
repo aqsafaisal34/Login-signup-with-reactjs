@@ -1,20 +1,17 @@
 import express from "express"
 import cors from "cors"
-import { nanoid } from 'nanoid';
 import mongoose from 'mongoose';
-import {
-    stringToHash,
-    varifyHash,
-} from "bcrypt-inzi"
+import { stringToHash, varifyHash } from "bcrypt-inzi"
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5001;
 
 
 const userSchema = new mongoose.Schema({
+
     firstName: { type: String },
     lastName: { type: String },
     email: { type: String, required: true },
@@ -64,27 +61,28 @@ app.post("/signup", (req, res) => {
 
                 stringToHash(body.password).then(hashString => {
 
-                    let newUser = new userModel({
+                    userModel.create({
                         firstName: body.firstName,
                         lastName: body.lastName,
                         email: body.email.toLowerCase(),
                         password: hashString
-                    });
-                    newUser.save((err, result) => {
-                        if (!err) {
-                            console.log("data saved: ", result);
-                            res.status(201).send({ message: "user is created" });
-                        } else {
-                            console.log("db error: ", err);
-                            res.status(500).send({ message: "internal server error" });
-                        }
-                    });
+                    },
+                        (err, result) => {
+                            if (!err) {
+                                console.log("data saved: ", result);
+                                res.status(201).send({ message: "user is created" });
+                            } else {
+                                console.log("db error: ", err);
+                                res.status(500).send({ message: "internal server error" });
+                            }
+                        });
                 })
 
             }
         } else {
             console.log("db error: ", err);
             res.status(500).send({ message: "db error in query" });
+            return;
         }
     })
 });
@@ -102,6 +100,12 @@ app.get("/users", async (req, res) => {
 })
 
 
+
+
+
+
+
+
 app.post("/login", (req, res) => {
 
     let body = req.body;
@@ -116,8 +120,9 @@ app.post("/login", (req, res) => {
         );
         return;
     }
-     // check if user already exist // query email user
-     userModel.findOne({ email: body.email }, (err, data) => {
+
+    // check if user already exist // query email user
+    userModel.findOne({ email: body.email }, (err, data) => {
         if (!err) {
             console.log("data: ", data);
 
@@ -164,8 +169,9 @@ app.listen(port, () => {
 
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
-let dbURI = 'mongodb+srv://abc:abc@cluster0.iunhwh0.mongodb.net/socialMedia?retryWrites=true&w=majority';
+let dbURI = 'mongodb+srv://abc:abc@cluster0.iunhwh0.mongodb.net/socialMediabase?retryWrites=true&w=majority';
 mongoose.connect(dbURI);
 
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////

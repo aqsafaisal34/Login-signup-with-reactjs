@@ -1,0 +1,22 @@
+.nav>ul {
+  display: flex;
+  list-style: none;
+  width: 100%;
+  justify-content: center;
+
+}
+
+.nav>ul>li {
+  border: 1px solid black;
+  margin: 25px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10px;
+  background-color: #e7eef9;
+  font-size: 20px;
+  
+}
+
+.nav>ul>li>a {
+  text-decoration: none;
+  color: black;
+}

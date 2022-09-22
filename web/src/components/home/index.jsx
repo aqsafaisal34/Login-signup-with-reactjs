@@ -30,7 +30,7 @@ let Home = () => {
   }
 
   return (
-    <div>
+    <div className='weather'>
       <h1 id='Header'>Weather App</h1>
       <form onSubmit={submitHandler}>
     {/* City Name:  */}
